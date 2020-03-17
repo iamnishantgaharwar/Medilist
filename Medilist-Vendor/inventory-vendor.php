@@ -9,9 +9,9 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 		<link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 		<link rel="stylesheet" href="main.css">
-		<link rel="stylesheet" href="bootstrap.css">
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
 
 		<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 		<script src="https://code.highcharts.com/highcharts.js"></script>
@@ -36,50 +36,78 @@
 			</div>
 			<nav>
 				<ul>
-					<li class="active">
+					<li>
 						<a href="add-medicine.html">
 							<span><i class="fa fa-user"></i></span>
 							<span>Add Medicine</span>
 						</a>
 					</li>
-					<!--li>
-						<a href="vendor.html">
-
-							<span><i class="fa fa-envelope"></i></span>
-							<span>Vendors</span>
-						</a>
-					</li-->
-					<li >
-						<a href="inventory-vendor.php">
+					<li class="active">
+						<a href="inventory-vendor.html">
 							<span><i class="fa fa-bar-chart"></i></span>
 							<span>Inventory</span>
 						</a>
 					</li>
-					<!--li>
-						<a href="#">
-							<span><i class="fa fa-credit-card-alt"></i></span>
-							<span>Payments</span>
-						</a>
-					</li-->
 				</ul>
 			</nav>
 		</div>
 		<div class="main-content">
 			<div class="title">
-				Add Medicine
+				Inventory
 			</div>
 
 <!-- TABLE OF CONTENT -->
-			<form class="" action="add-medicine.php" method="post">
 
+		<form class="" action="index.html" method="post">
+			<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#ID</th>
+      <th scope="col">Medicine Name</th>
+      <th scope="col">Manufacture Date</th>
+      <th scope="col">Expiry Date</th>
+			<th scope="col">Price</th>
+			<th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
 
-					<input class="form-control" type="text" name="medicine_name" value="" placeholder="Medicine Name"><br>
-					<input class="form-control" type="datetime" name="medicine_mfg_date" value="" placeholder="Manufacture Date"><br>
-					<input class="form-control" type="datetime" name="medicine_exp_date" value="" placeholder="Expiry Date"><br>
-					<input class="form-control" type="text" name="medicine_price" value="" placeholder="Medicine Price"><br>
-					<input class="form-control" type="text" name="vendor_id" value="" placeholder="Vendor ID"><br>
-					<input type="submit" name="submit" value="Save">
-			</form>
-				</div>
+		<!-- PHP SCRIPT FOR GETTING VALUES IN TABLE -->
+
+		<?php
+			$con = mysqli_connect('localhost','root','','medilist');
+				if(!$con)
+				{
+					echo "Not connected to the database:(";
+				}
+				$sql="SELECT * FROM `inventory`";
+				$result=mysqli_query($con,$sql);
+				$total=mysqli_num_rows($result);
+				if ($total!=0)
+				{
+					while ($data=mysqli_fetch_assoc($result))
+					{
+			?>
+    <tr>
+			<th scope="col"> <?php echo $data['medicine_id'];?> </th>
+      <th scope="col"> <?php echo $data['medicine_name'];?> </th>
+    	<th scope="col"> <?php echo $data['medicine_mfg_date'];?> </th>
+      <th scope="col"> <?php echo $data['medicine_exp_date'];?> </th>
+			<th scope="col"> <?php echo $data['medicine_price'];?> </th>
+			<td colspan="2">  <a class="btn btn-info" href="update-inventory.php?edit=<?php echo $data['medicine_id']; ?>">Edit</a>
+				<a class="btn btn-danger"href="inventory-vendor-process.php?delete=<?php echo $data['medicine_id']; ?>">Delete</a>
+			</td>
+    </tr>
+		<?php
+		}
+	}
+		else {
+			echo "No Record Found";
+		}
+		 ?>
+  </tbody>
+</table>
+		</form>
+			</div>
 	</body>
 </html>

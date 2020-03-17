@@ -1,3 +1,11 @@
+<?php
+/* -------------------------CONNECTION CODE-------------------------*/
+$con = mysqli_connect('localhost','root','','medilist');
+if(!$con)
+{
+  echo "Not connected to the database:(";
+}
+?>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -9,9 +17,10 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 		<link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 		<link rel="stylesheet" href="main.css">
-		<link rel="stylesheet" href="bootstrap.css">
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+
 
 		<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 		<script src="https://code.highcharts.com/highcharts.js"></script>
@@ -36,23 +45,23 @@
 			</div>
 			<nav>
 				<ul>
-					<li class="active">
+					<li>
 						<a href="add-medicine.html">
 							<span><i class="fa fa-user"></i></span>
 							<span>Add Medicine</span>
 						</a>
 					</li>
-					<!--li>
-						<a href="vendor.html">
+					<li class="active">
+						<a href="update-inventory.php">
 
 							<span><i class="fa fa-envelope"></i></span>
-							<span>Vendors</span>
+							<span>Update Medicine</span>
 						</a>
-					</li-->
-					<li >
+					</li>
+					<li>
 						<a href="inventory-vendor.php">
 							<span><i class="fa fa-bar-chart"></i></span>
-							<span>Inventory</span>
+							<span>Back</span>
 						</a>
 					</li>
 					<!--li>
@@ -66,20 +75,39 @@
 		</div>
 		<div class="main-content">
 			<div class="title">
-				Add Medicine
+				Update Inventory
 			</div>
-
 <!-- TABLE OF CONTENT -->
-			<form class="" action="add-medicine.php" method="post">
+<?php
+		if (isset($_GET['edit'])){
+			$edit = $_GET['edit'];
+			$update = "SELECT *FROM `inventory` WHERE medicine_id='$edit'";
+			$rec= mysqli_query($con,$update);
+			$record= mysqli_fetch_assoc($rec);
+			$med_name=$record['medicine_name'];
+			$med_manufacture=$record['medicine_mfg_date'];
+			$med_expiry =$record['medicine_exp_date'];
+			$med_price =$record['medicine_price'];
+			$med_vendor_id =$record['vendor_id'];
+			$id = $record['medicine_id'];
+			}
+			else {
+					echo "No record has been altered";
+			}
+
+		?>
+<form class="" action="inventory-vendor-process" method="post">
+
+		<input type="hidden" name="id" value="<?php echo $edit; ?>">
+		<input class="form-control" type="text" name="medicine_name" value="<?php echo $med_name; ?>" placeholder="Medicine Name"><br>
+		<input class="form-control" type="datetime" name="medicine_mfg_date" value="<?php echo $med_manufacture; ?>" placeholder="Manufacture Date"><br>
+		<input class="form-control" type="datetime" name="medicine_exp_date" value="<?php echo $med_expiry; ?>" placeholder="Expiry Date"><br>
+		<input class="form-control" type="text" name="medicine_price" value="<?php echo $med_price; ?>" placeholder="Medicine Price"><br>
+		<input class="form-control" type="text" name="vendor_id" value="<?php echo $med_vendor_id; ?>" placeholder="Vendor ID"><br>
+		<button class="btn btn-outline-success" type="submit" name="update">Update</button>
+</form>
 
 
-					<input class="form-control" type="text" name="medicine_name" value="" placeholder="Medicine Name"><br>
-					<input class="form-control" type="datetime" name="medicine_mfg_date" value="" placeholder="Manufacture Date"><br>
-					<input class="form-control" type="datetime" name="medicine_exp_date" value="" placeholder="Expiry Date"><br>
-					<input class="form-control" type="text" name="medicine_price" value="" placeholder="Medicine Price"><br>
-					<input class="form-control" type="text" name="vendor_id" value="" placeholder="Vendor ID"><br>
-					<input type="submit" name="submit" value="Save">
-			</form>
-				</div>
+		</div>
 	</body>
 </html>

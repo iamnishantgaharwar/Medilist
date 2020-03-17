@@ -12,18 +12,15 @@ if(!$con)
     $med_price =$_POST['medicine_price'];
     $med_vendor_id =$_POST['vendor_id'];
 
-		$sql="INSERT INTO inventory (medicine_name,medicine_mfg_date,medicine_exp_date,medicine_price,vendor_id) VALUES('$med_name','$med_manufacture','$med_expiry','$med_price','$med_vendor_id')";
-		$result=mysqli_query($con,$sql);
+	 $sql="INSERT INTO `inventory` (medicine_name,medicine_mfg_date,medicine_exp_date,medicine_price,vendor_id) VALUES('$med_name','$med_manufacture','$med_expiry','$med_price','$med_vendor_id')";
+		$result = mysqli_query($con,$sql);
 		if($result)
 		{
-		//$_SESSION["username"]=$_su["username"];
-	//	header("location:homepage.html");
-		echo "success";
+			echo "success";
+			header("refresh:2; url=add-medicine.html");
 		}
 		else
 		{
-		//echo "<br>"."error wrong password or username";
-		//header("location:index.html");
 		echo "unsuccess";
 		}
 ?>
